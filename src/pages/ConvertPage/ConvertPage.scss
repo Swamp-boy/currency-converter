@@ -1,0 +1,44 @@
+.button {
+  border: 1px solid grey;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 200px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.currency-convert-btn {
+  margin: auto;
+  position: absolute;
+  left: calc(50% - 100px);
+  top: 50%;
+}
+
+.currency-show-btn {
+  margin: auto;
+  position: absolute;
+  left: calc(50% - 100px);
+  top: 80%;
+}
+
+.currency-convert-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  margin: 200px auto 0 auto;
+}
+
+.currency-input {
+  border: 1px solid grey;
+  border-radius: 5px;
+  height: 28px;
+  min-width: 50px;
+  outline: none;
+}
+
+.currency-convert-container {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+}
