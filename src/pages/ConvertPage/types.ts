@@ -35,10 +35,10 @@ export type Currency =
     | 'JPY'
     | 'RUB';
 
-type ValueCurrencyItem = {
+export type ValueCurrencyItem = {
     ID: string;
     NumCode: string;
-    CharCode: string;
+    CharCode: Currency;
     Nominal: number;
     Name: string;
     Value: number;

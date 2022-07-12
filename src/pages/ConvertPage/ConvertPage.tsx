@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getCurrencyAxiosData } from '../../requests/fetchCurrencyData';
 import './ConvertPage.scss';
-import Select from '../../components/Select/Select';
 import { BankData, Currency } from './types';
 import { getConvertedValue } from './utils';
-import cn from 'classnames';
-import { Link, useLocation, withRouter } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Button, TextField } from '@mui/material';
+import CurrencySelect from '../../components/CurrencySelect/CurrencySelect';
+import useBankData from '../../hooks/useBankData';
 
 const ConvertPage = () => {
     const [currency, setCurrency] = useState<Currency>('USD');
@@ -13,70 +14,82 @@ const ConvertPage = () => {
     const [currentValue, setCurrentValue] = useState<string>('');
     const [convertedValue, setConvertedValue] = useState<number>(0);
     const [bankData, setBankData] = useState<BankData | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const location = useLocation();
 
     const convertValue = () => {
         if (isNaN(Number(currentValue)) || Number(currentValue) < 0 || bankData === null) {
-            console.log('incorrect string');
-
             return;
         }
+
         setConvertedValue(
             Number(getConvertedValue(Number(currentValue), bankData, currency, convertedCurrency)),
         );
-
-        console.log(convertedCurrency);
     };
 
-    useEffect(() => {
-        getCurrencyAxiosData().then((data) => {
-            setBankData(data.data);
-            setIsLoading(false);
-        });
-    }, []);
+    useBankData(setBankData);
 
-    if (isLoading) {
+    if (!bankData) {
         return null;
     }
 
-    const currencyItems = [...Object.keys(bankData!.Valute), 'RUB'] as unknown as Currency[];
+    const currencyItems = [...Object.keys(bankData.Valute), 'RUB'].sort() as unknown as Currency[];
+
+    const onInputChange = (val: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        setCurrentValue(val.target.value);
+    };
+
+    const onKeyDown = (key: React.KeyboardEvent) => {
+        if (key.key === 'Enter') {
+            convertValue();
+        }
+    };
 
     return (
         <div>
             <div className={'currency-convert-wrapper'}>
                 <div className={'currency-convert-container'}>
-                    <input
-                        className={'currency-input'}
-                        type={'text'}
-                        onChange={(val) => setCurrentValue(val.target.value)}
+                    <TextField
+                        id="convert-input"
+                        variant="outlined"
+                        onChange={onInputChange}
+                        onKeyDown={onKeyDown}
                     />
-                    <Select
+
+                    <CurrencySelect
+                        id={'currency-to-convert'}
                         items={currencyItems}
-                        current={currency}
-                        onChange={(item) => setCurrency(item)}
+                        currentItem={currency}
+                        onItemSelect={setCurrency}
                     />
                 </div>
                 <div className={'currency-convert-container'}>
-                    <input className={'currency-input'} type={'text'} value={convertedValue} />
-                    <Select
+                    <TextField
+                        id="converted-input"
+                        variant="outlined"
+                        onChange={onInputChange}
+                        onKeyDown={onKeyDown}
+                        value={convertedValue}
+                    />
+
+                    <CurrencySelect
+                        id={'converted-currency'}
                         items={currencyItems}
-                        current={convertedCurrency}
-                        onChange={(item: Currency) => setConvertedCurrency(item)}
+                        currentItem={convertedCurrency}
+                        onItemSelect={setConvertedCurrency}
                     />
                 </div>
             </div>
-
-            <div className={cn('button', 'currency-convert-btn')} onClick={convertValue}>
-                Convert
+            <div className={'currency-buttons'}>
+                <Button variant="outlined" onClick={convertValue} size={'large'}>
+                    Convert
+                </Button>
+                <Link to={`${location.pathname}list`} className={'currency-show-btn'}>
+                    <Button size={'large'} variant="outlined" onClick={convertValue}>
+                        Show all
+                    </Button>
+                </Link>
             </div>
-
-            <Link to={`${location.pathname}list`}>
-                <div className={cn('button', 'currency-show-btn')} onClick={convertValue}>
-                    Show all
-                </div>
-            </Link>
         </div>
     );
 };

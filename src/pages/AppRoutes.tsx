@@ -5,8 +5,6 @@ import { Switch } from 'react-router';
 import ListPage from './ListPage/ListPage';
 
 const AppRoutes: React.FC<RouteComponentProps> = ({ match: { path }, location: { pathname } }) => {
-    console.log(`${path}list`);
-
     return (
         <Switch>
             {pathname[pathname.length - 1] !== '/' && (

@@ -1,0 +1,16 @@
+.card {
+  width: 250px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 75px;
+
+}
+
+.card-value {
+  display: flex;
+  justify-content: space-between;
+}
