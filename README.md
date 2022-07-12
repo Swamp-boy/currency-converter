@@ -2,8 +2,6 @@
 
 ковертер валют.
 
-gitHub pages:
-
 запуск проекта локально
 
 1 git clone https://github.com/Swamp-boy/currency-converter/tree/master
