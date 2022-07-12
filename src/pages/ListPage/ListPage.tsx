@@ -34,8 +34,6 @@ const ListPage = () => {
 
     //TODO: ревлизоывать функционал смены абсолютной веелчины в которой расчитывается курс остальных валют
 
-    console.log(bankData);
-
     const currencyArray = Object.keys(bankData.Valute) as unknown as Currency[];
 
     return (
